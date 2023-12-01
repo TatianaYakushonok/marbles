@@ -15,7 +15,7 @@
   };
 
   const isWinner = (botCount, playerCount) => {
-    const winner = botCount > playerCount ? 'Бот выиграл' : 'Игрок выиграл';
+    const winner = botCount > playerCount ? 'Бот выиграл' : 'Вы выиграли';
     if (playerCount <= 0 || botCount <= 0) {
       alert(`${outputRes(botCount, playerCount)}
       ${winner}`);
@@ -24,13 +24,116 @@
     return false;
   };
 
+  const rcp = () => {
+    const FIGURE_RU = ['камень', 'ножницы', 'бумага'];
+    const result = {
+      player: 0,
+      bot: 0,
+    };
+
+    alert(`
+    Определим, кто делает первый ход.
+    Сыграем в игру "Камень, Ножницы, Бумага"`);
+
+    const randomNumber = getRandomIntInclusive(0, FIGURE_RU.length - 1);
+    const computerFigure = FIGURE_RU[randomNumber];
+    const str = prompt(`${FIGURE_RU.join(', ')}?`);
+
+    if (str === null) return;
+
+    // prettier-ignore
+    const playerFigure = FIGURE_RU
+        .filter((word) => !word.indexOf(str.toLowerCase()))
+        .join('');
+
+    if (!playerFigure) {
+      alert('Введите корректное значение');
+      return rcp();
+    }
+
+    switch (true) {
+      case computerFigure === playerFigure:
+        alert(`
+          Бот: ${computerFigure}
+          Игрок: ${playerFigure}
+          Ничья!`);
+        break;
+      case (['камень'].includes(computerFigure) &&
+        ['ножницы'].includes(playerFigure)) ||
+        (['ножницы'].includes(computerFigure) &&
+          ['бумага'].includes(playerFigure)) ||
+        (['бумага'].includes(computerFigure) &&
+          ['камень'].includes(playerFigure)):
+        alert(`
+          Бот: ${computerFigure}
+          Игрок: ${playerFigure}
+          Победил бот!`);
+        result.bot++;
+        break;
+      default:
+        alert(`
+          Бот: ${computerFigure}
+          Игрок: ${playerFigure}
+          Вы победили!`);
+        result.player++;
+        break;
+    }
+
+    if (result.bot === result.player) return rcp();
+    if (result.bot > result.player) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  /* const evenOrOdd = (botNum, playerNum, countBot, countPlayer) => {
+    const winner = isWinner(countBot, countPlayer);
+    switch (true) {
+      case (Boolean(botNum) && Boolean(playerNum)) ||
+        (Boolean(!botNum) && Boolean(!playerNum)):
+        if (!winner && bot) {
+          countBot -= parseInt(botNum);
+          countPlayer += parseInt(botNum);
+          alert(`
+          Вы угадали
+              ${outputRes(countBot, countPlayer)}`);
+          break;
+        } else {
+          countBot += parseInt(playerNum);
+          countPlayer -= parseInt(playerNum);
+          alert(`
+          Бот угадал
+              ${outputRes(countBot, countPlayer)}`);
+          break;
+        }
+      default:
+        if (!winner && bot) {
+          countBot += parseInt(botNum);
+          countPlayer -= parseInt(botNum);
+          alert(`
+          Вы не угадали
+              ${outputRes(countBot, countPlayer)}`);
+          break;
+        } else {
+          countBot -= parseInt(playerNum);
+          countPlayer += parseInt(playerNum);
+          alert(`
+          Бот не угадал
+              ${outputRes(countBot, countPlayer)}`);
+          break;
+        }
+    }
+  }; */
+
   const game = () => {
+    let bot;
+    let player;
+
     const ball = {
       player: 5,
       bot: 5,
     };
-    let bot = false;
-    let player = true;
 
     console.log(`
     Старт игры`);
@@ -38,6 +141,18 @@
     Количество шариков:
     Игрок: ${ball.player}
     Бот: ${ball.bot}`);
+
+    const win = rcp();
+
+    if (win) {
+      alert('Первый ход делает бот');
+      bot = true;
+      player = false;
+    } else {
+      alert('Первый ход делаете вы');
+      bot = false;
+      player = true;
+    }
 
     return function start() {
       const winner = isWinner(ball.bot, ball.player);
