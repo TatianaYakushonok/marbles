@@ -87,45 +87,6 @@
     }
   };
 
-  /* const evenOrOdd = (botNum, playerNum, countBot, countPlayer) => {
-    const winner = isWinner(countBot, countPlayer);
-    switch (true) {
-      case (Boolean(botNum) && Boolean(playerNum)) ||
-        (Boolean(!botNum) && Boolean(!playerNum)):
-        if (!winner && bot) {
-          countBot -= parseInt(botNum);
-          countPlayer += parseInt(botNum);
-          alert(`
-          Вы угадали
-              ${outputRes(countBot, countPlayer)}`);
-          break;
-        } else {
-          countBot += parseInt(playerNum);
-          countPlayer -= parseInt(playerNum);
-          alert(`
-          Бот угадал
-              ${outputRes(countBot, countPlayer)}`);
-          break;
-        }
-      default:
-        if (!winner && bot) {
-          countBot += parseInt(botNum);
-          countPlayer -= parseInt(botNum);
-          alert(`
-          Вы не угадали
-              ${outputRes(countBot, countPlayer)}`);
-          break;
-        } else {
-          countBot -= parseInt(playerNum);
-          countPlayer += parseInt(playerNum);
-          alert(`
-          Бот не угадал
-              ${outputRes(countBot, countPlayer)}`);
-          break;
-        }
-    }
-  }; */
-
   const game = () => {
     let bot;
     let player;
@@ -135,26 +96,18 @@
       bot: 5,
     };
 
-    console.log(`
-    Старт игры`);
-    console.log(`
-    Количество шариков:
-    Игрок: ${ball.player}
-    Бот: ${ball.bot}`);
-
     const win = rcp();
 
-    if (win) {
-      alert('Первый ход делает бот');
-      bot = true;
-      player = false;
-    } else {
-      alert('Первый ход делаете вы');
-      bot = false;
-      player = true;
-    }
+    win ? (bot = true) : (player = true);
 
     return function start() {
+      console.log(`
+      Старт игры`);
+      console.log(`
+      Количество шариков:
+      Игрок: ${ball.player}
+      Бот: ${ball.bot}`);
+
       const winner = isWinner(ball.bot, ball.player);
       if (!winner && player) {
         alert('Ваш ход');
@@ -169,6 +122,7 @@
         }
 
         // prettier-ignore
+        // chooseEvenOrOdd(randomNum)
         switch (true) {
           case (randomNum % 2 === 0 && parseInt(countBall) % 2 === 0) ||
               (randomNum % 2 !== 0 && parseInt(countBall) % 2 !== 0):
