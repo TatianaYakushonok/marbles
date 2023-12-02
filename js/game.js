@@ -122,7 +122,7 @@
         }
 
         // prettier-ignore
-        // chooseEvenOrOdd(randomNum)
+
         switch (true) {
           case (randomNum % 2 === 0 && parseInt(countBall) % 2 === 0) ||
               (randomNum % 2 !== 0 && parseInt(countBall) % 2 !== 0):
