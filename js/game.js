@@ -1,6 +1,9 @@
 'use strict';
 
 (() => {
+  let bot;
+  let player;
+
   const getRandomIntInclusive = (min, max) =>
     Math.floor(Math.random() * (max - min + 1) + min);
 
@@ -46,6 +49,8 @@
         .filter((word) => !word.indexOf(str.toLowerCase()))
         .join('');
 
+    if (playerFigure === null) return;
+
     if (!playerFigure) {
       alert('Введите корректное значение');
       return rcp();
@@ -88,9 +93,6 @@
   };
 
   const game = () => {
-    let bot;
-    let player;
-
     const ball = {
       player: 5,
       bot: 5,
@@ -98,7 +100,28 @@
 
     const win = rcp();
 
-    win ? (bot = true) : (player = true);
+    if (win) {
+      bot = true;
+      player = false;
+    } else {
+      bot = false;
+      player = true;
+    }
+
+    alert('Сыграем в игру марблы.');
+    // prettier-ignore
+    alert(
+        `Правила игры: 
+        Кто первый ходит, загадывает число.
+        Нужно угадать четное оно или нет, если игрок угадывает,
+        ему прибавляется то количество шариков, которое загадал 
+        первый игрок, а у первого отнимается. Если не угадывает,
+        отнимается это количество шариков, а у первого прибавляется.
+        -----------------------------------------------------------
+        Количество шариков:
+        Игрок: ${ball.player}
+        Бот: ${ball.bot}`,
+    );
 
     return function start() {
       console.log(`
@@ -108,16 +131,24 @@
       Игрок: ${ball.player}
       Бот: ${ball.bot}`);
 
+      bot, player;
+
       const winner = isWinner(ball.bot, ball.player);
       if (!winner && player) {
         alert('Ваш ход');
-        const countBall = prompt(`Введите число от 1 до ${ball.player}`);
+        const maxRnge = ball.player > ball.bot ? ball.bot : ball.player;
+        const countBall = prompt(`Введите число от 1 до ${maxRnge}`);
         const randomNum = getRandomIntInclusive(1, ball.player);
 
         if (countBall === null) return;
 
-        if (isNaN(countBall) || parseInt(countBall) === 0) {
+        if (isNaN(countBall) || parseInt(countBall) <= 0) {
           alert('Введите корректное число');
+          return start();
+        }
+
+        if (parseInt(countBall) > ball.player) {
+          alert('Вы ввели число больше заданного диапазона.');
           return start();
         }
 
@@ -146,7 +177,8 @@
         return start();
       } else if (!winner && bot) {
         alert('Ход бота');
-        const randomNum = getRandomIntInclusive(1, ball.bot);
+        const maxRnge = ball.bot > ball.player ? ball.player : ball.bot;
+        const randomNum = getRandomIntInclusive(1, maxRnge);
         const answer = confirm('Число четное?');
 
         switch (true) {
@@ -178,7 +210,7 @@
 
           ball.player = 5;
           ball.bot = 5;
-          return start();
+          return game(), start();
         } else {
           return;
         }
