@@ -133,11 +133,13 @@
 
       bot, player;
 
-      const winner = isWinner(ball.bot, ball.player);
+      const winner = isWinner(
+        ball.bot > 0 ? ball.bot : 0,
+        ball.player > 0 ? ball.player : 0,
+      );
       if (!winner && player) {
         alert('Ваш ход');
-        const maxRnge = ball.player > ball.bot ? ball.bot : ball.player;
-        const countBall = prompt(`Введите число от 1 до ${maxRnge}`);
+        const countBall = prompt(`Введите число от 1 до ${ball.player}`);
         const randomNum = getRandomIntInclusive(1, ball.player);
 
         if (countBall === null) return;
@@ -161,14 +163,14 @@
             ball.player -= parseInt(countBall);
             alert(`
             Бот угадал
-                ${outputRes(ball.bot, ball.player)}`);
+                ${outputRes(ball.bot, ball.player > 0 ? ball.player : 0)}`);
             break;
           default:
             ball.bot -= parseInt(countBall);
             ball.player += parseInt(countBall);
             alert(`
             Бот не угадал
-                ${outputRes(ball.bot, ball.player)}`);
+                ${outputRes(ball.bot > 0 ? ball.bot : 0, ball.player)}`);
             break;
         }
         player = false;
@@ -177,8 +179,7 @@
         return start();
       } else if (!winner && bot) {
         alert('Ход бота');
-        const maxRnge = ball.bot > ball.player ? ball.player : ball.bot;
-        const randomNum = getRandomIntInclusive(1, maxRnge);
+        const randomNum = getRandomIntInclusive(1, ball.bot);
         const answer = confirm('Число четное?');
 
         switch (true) {
@@ -188,14 +189,14 @@
             ball.player += parseInt(randomNum);
             alert(`
             Вы угадали
-                ${outputRes(ball.bot, ball.player)}`);
+                ${outputRes(ball.bot > 0 ? ball.bot : 0, ball.player)}`);
             break;
           default:
             ball.bot += parseInt(randomNum);
             ball.player -= parseInt(randomNum);
             alert(`
             Вы не угадали
-                ${outputRes(ball.bot, ball.player)}`);
+                ${outputRes(ball.bot, ball.player > 0 ? ball.player : 0)}`);
             break;
         }
         bot = false;
