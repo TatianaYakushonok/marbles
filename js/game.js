@@ -51,7 +51,7 @@
 
     if (playerFigure === null) return;
 
-    if (!playerFigure) {
+    if (!playerFigure || str === '') {
       alert('Введите корректное значение');
       return rcp();
     }
@@ -142,7 +142,7 @@
 
         if (countBall === null) return;
 
-        if (isNaN(countBall) || parseInt(countBall) <= 0) {
+        if (isNaN(+countBall) || +countBall <= 0) {
           alert('Введите корректное число');
           return start();
         }
