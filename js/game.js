@@ -42,7 +42,7 @@
     const computerFigure = FIGURE_RU[randomNumber];
     const str = prompt(`${FIGURE_RU.join(', ')}?`);
 
-    if (str === null) return;
+    if (str === null) return null;
 
     // prettier-ignore
     const playerFigure = FIGURE_RU
@@ -99,6 +99,8 @@
     };
 
     const win = rcp();
+
+    if (win === null) return;
 
     if (win) {
       bot = true;
